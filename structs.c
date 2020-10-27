@@ -9,7 +9,7 @@ struct Command* allocateCommand(void) {
   command->name = NULL;
   command->input = NULL;
   command->output = NULL;
-  command->background = true;
+  command->background = false;
   return command;
 }
 
@@ -51,6 +51,7 @@ void printCommand(struct Command* command) {
 }
 
 
+// function for expanding the $$ string in command attributes
 void pidExpandAttributes(struct Command* command){
   command->name ? expandPID(command->name) : NULL;
   command->input ? expandPID(command->input) : NULL;
