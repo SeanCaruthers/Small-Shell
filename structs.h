@@ -6,7 +6,7 @@
 #include "libraries.h"
 #define MAX_ARGS 512
 
-struct Command {
+struct Command{
   char* name;                           // command name
   char* args[MAX_ARGS];                 // command arguments
   char* input;                          // input file's name

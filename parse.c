@@ -24,12 +24,12 @@ struct Command* parseCommand(struct Command* command) {
   char* token;
   size_t index = 0;
 
-  // parse the command name
+  // parse the command name, allocate memory for it in the struct and expand the variable $$ if necessary
   command->name = strdup(strtok_r(line, DELIM, &bookmark));
-  
+
   // parse tokens from the line until the newline
   while((token = strtok_r(NULL, DELIM, &bookmark))) {
-    
+
     // check for input redirection token 
     if((*token) == '<') {
       // if input redirection, copy input filename to command struct's input attribute
@@ -56,10 +56,10 @@ struct Command* parseCommand(struct Command* command) {
     }
   }
   
- 
+
   // free the space allocated for input
   free(line);
-  printCommand(command);
+
   // return our command filled with parsed information
   return command;
 }

@@ -35,35 +35,30 @@ void freeCommand(struct Command* command){
 
 // a function for printing our command struct
 void printCommand(struct Command* command) {
-  printf("Command name : ");
-  if(command->name) {
-    printf("%s\n", command->name);
-  }
-  else {
-    printf("None\n");
-  }
-  printf("Command input : ");
-  if(command->input) {
-    printf("%s\n", command->input);
-  }
-  else {
-    printf("None\n");
-  }
-  printf("Command output : ");
-  if(command->output) {
-    printf("%s\n", command->output);
-  }
-  else {
-    printf("None\n");
-  }
+  
+  char* default_msg = "None specified";
+  printf("\n\nCommand name   : %s\n", command->name ? command->name : default_msg);
+  printf("Command input  : %s\n", command->input ? command->input : default_msg);
+  printf("Command output : %s\n", command->output ? command->output : default_msg);
+  
   size_t index = 0;
-  printf("Command Arguments");
+  printf("Command Arguments : %s", command->args[index] ? command->args[index++] : default_msg);
   while(command->args[index]){
-    printf(", %s", command->args[index]);
+    printf(", %s", command->args[index++]);
+  }  
+  printf("\nProcess type  : %s\n", command->background ? "Background" : "Foreground");  
+  
+}
+
+
+void pidExpandAttributes(struct Command* command){
+  command->name ? expandPID(command->name) : NULL;
+  command->input ? expandPID(command->input) : NULL;
+  command->output ? expandPID(command->output) : NULL;
+
+  size_t index = 0;
+  while(command->args[index]) {
+    expandPID(command->args[index]);
     index++;
   }
-  
-  printf("\nProcess type: %s\n", command->background ? "Background" : "Foreground");
-  
-  
 }
