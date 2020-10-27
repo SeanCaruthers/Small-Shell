@@ -24,19 +24,18 @@ int main(void){
     
     // pass the struct to the parse Command method to fill in the attributes
     command = parseCommand(command);
-    pidExpandAttributes(command);
+    
+
     // 2. Handle blank lines and comments beginning with #
     if(!command->name || *command->name == '#') {
       freeCommand(command);
       continue;
     }
     
-    
     // 3. Provide expansion for the variable $$
+    pidExpandAttributes(command);
     
     // 4. Execute 3 commands: exit, cd and status
-    
-    
     printCommand(command);
     if(!strcmp(command->name, "exit")){
       freeCommand(command);
