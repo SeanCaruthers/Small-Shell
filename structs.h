@@ -5,6 +5,7 @@
 */
 #include "libraries.h"
 #define MAX_ARGS 512
+#define MAX_NODES 512
 
 struct Command{
   char* name;                           // command name

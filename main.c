@@ -35,11 +35,15 @@ int main(void){
     // 3. Provide expansion for the variable $$
     pidExpandAttributes(command);
     
+    // remove new lines that cause bugs at the end of commands
+    removeNewLinesFromAttributes(command);
+
     // 4. Execute 3 commands: exit, cd and status
     printCommand(command);
-    if(!strcmp(command->name, "exit")){
-      freeCommand(command);
-      return 0;
+
+    // check to see if the command is a built in command (execute and continue if it is)
+    if(checkBuiltIn(command)){
+      continue;
     }
     
     // 5. Execute other commands by creating new processes using exec

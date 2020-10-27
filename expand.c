@@ -7,7 +7,7 @@
 
 // a function for expanding $$ in a token
 void expandPID(char* token) {
-  
+
   char* found = NULL;
 
   // check for the $$ subtoken
@@ -33,3 +33,12 @@ void expandPID(char* token) {
   }
 }
 
+// a function for removing new lines for the end of strings
+void removeNewLines(char* token){
+  while(*token) {
+    if(*token == '\n') {
+      *token = '\0';
+    }
+    token++;
+  }
+}
