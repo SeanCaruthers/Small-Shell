@@ -7,20 +7,16 @@
 #include "functions.h"
 #include "structs.h"
 
-// a function to check whether the command is a built in command
+// a function to check whether the command is a built in command and run it if it is
 bool checkBuiltIn(struct Command* command) {
 
-  printf("checking built ins\n");
-
   if(!strcmp(command->name, "cd")){            
-    printf("cd found\n");
     changeDir(command);
     return true;
   }
   else if(!strcmp(command->name, "exit")){                                                                               
     exitProgram(command);
-  }                                                                                                                      
-                                                                                                                        
+  }                                         
   else if(!strcmp(command->name, "status")){                                                                             
     checkStatus(command);                                                                                                 
     return true;
@@ -59,7 +55,6 @@ void changeDir(struct Command* command) {
     }
     
   }
-  printf("\ncurrent environment = %s\n", getenv("PWD"));
 }
 
 void checkStatus(struct Command* command) {

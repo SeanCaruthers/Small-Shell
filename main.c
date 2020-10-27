@@ -25,7 +25,6 @@ int main(void){
     // pass the struct to the parse Command method to fill in the attributes
     command = parseCommand(command);
     
-
     // 2. Handle blank lines and comments beginning with #
     if(!command->name || *command->name == '#') {
       freeCommand(command);
@@ -39,10 +38,11 @@ int main(void){
     removeNewLinesFromAttributes(command);
 
     // 4. Execute 3 commands: exit, cd and status
-    printCommand(command);
+    //printCommand(command);
 
     // check to see if the command is a built in command (execute and continue if it is)
     if(checkBuiltIn(command)){
+      freeCommand(command);
       continue;
     }
     

@@ -20,7 +20,7 @@ void freePath(struct Path* path) {
 
 // a function for merging a path prefix and relative suffix
 char* mergePaths(char* prefix, char* suffix) {
-  printf("\nprefix = %s\nsuffix = %s\n", prefix, suffix);
+
   char* slash = "/";
   char* new_pwd = calloc(strlen(prefix) + strlen(slash) + strlen(suffix) + 1, sizeof(char *));
   strcat(new_pwd, prefix);
