@@ -8,7 +8,7 @@
 #include "structs.h"
 
 // a function to check whether the command is a built in command and run it if it is
-bool checkBuiltIn(struct Command* command) {
+bool checkBuiltIn(struct Command* command, int* status) {
 
   if(!strcmp(command->name, "cd")){            
     changeDir(command);
@@ -17,8 +17,8 @@ bool checkBuiltIn(struct Command* command) {
   else if(!strcmp(command->name, "exit")){                                                                               
     exitProgram(command);
   }                                         
-  else if(!strcmp(command->name, "status")){                                                                             
-    checkStatus(command);                                                                                                 
+  else if(!strcmp(command->name, "status")){                                                                            
+    checkStatus(status);                                                                                                 
     return true;
   }
   return false;
@@ -57,6 +57,12 @@ void changeDir(struct Command* command) {
   }
 }
 
-void checkStatus(struct Command* command) {
-  
+// check exit status of last foreground process using macros as in the termination status lecture
+void checkStatus(int* status) {
+  if(WIFEXITED(*status)) {
+    printf("Exit value %d\n", WEXITSTATUS(*status));
+  }
+  else{
+    printf("Exit value %d\n", WTERMSIG(*status));
+  }
 }

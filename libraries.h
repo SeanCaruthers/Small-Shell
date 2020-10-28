@@ -5,3 +5,4 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <sys/wait.h>

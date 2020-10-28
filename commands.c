@@ -10,6 +10,7 @@ struct Command* allocateCommand(void) {
   command->input = NULL;
   command->output = NULL;
   command->background = false;
+  command->num_args = 0;
   return command;
 }
 

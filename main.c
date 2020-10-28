@@ -12,7 +12,12 @@ int main(void){
 
   // bool for while loop (keep it structured)
   bool running = true;         
-
+  
+  // status variable for tracking the last exit status
+  int* status;
+  int stat = 0;
+  status = &stat;
+  
   // keep our program running 
   while(running){              
     
@@ -39,14 +44,15 @@ int main(void){
 
     // 4. Execute 3 commands: exit, cd and status
     //printCommand(command);
-
+    
     // check to see if the command is a built in command (execute and continue if it is)
-    if(checkBuiltIn(command)){
+    if(checkBuiltIn(command, status)){
       freeCommand(command);
       continue;
     }
     
     // 5. Execute other commands by creating new processes using exec
+    forkCommand(command, status);
     
     // 6. Support input and output redirection
     

@@ -48,6 +48,7 @@ struct Command* parseCommand(struct Command* command) {
     // otherwise token is an command argument, add argument to command structs argument array
     else {
       command->args[index++] = strdup(token);
+      command->num_args++;
     }
   }
   
