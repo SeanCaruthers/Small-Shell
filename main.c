@@ -18,6 +18,8 @@ int main(void){
   int stat = 0;
   status = &stat;
   
+  
+
   // keep our program running 
   while(running){              
     

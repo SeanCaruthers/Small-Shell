@@ -21,3 +21,7 @@ void setRelativeToParent(char*);
 void forkCommand(struct Command*, int*);
 void redirectInput(char*);
 void redirectOutput(char*);
+void setupBackground(struct Command*);
+void setupForeground(struct Command*);
+void handle_SIGINT(int);
+void handle_SIGTSTP(int);
