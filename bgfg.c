@@ -45,11 +45,11 @@ void childForeground(struct Command* command, pid_t* child) {
 // a function for handle parent processes running in the foreground
 void parentForeground(struct Command* command, pid_t* child, int* status, struct LL* open_pid) {
 
-  // create a process node, add pid to it and add it to link list                                                                                                                                                          
+  // create a process node, add pid to it and add it to link list              
   struct Node* node = createNode();
   node->pid = *child;
   addNode(open_pid, node);
-
+  sleep(1);
 }
 
 // a function for handle parent processes running in the background
@@ -69,6 +69,7 @@ void parentBackground(struct Command* command, pid_t* child, int* status) {
 void checkOpenPID(struct LL* open_pid){
 
   struct Node* current = open_pid->head;
+  struct Node* previous = current;
   
   // iterate through the list of open processes
   while(current){
@@ -77,21 +78,24 @@ void checkOpenPID(struct LL* open_pid){
     int* statusptr;
     int status = 0;
     statusptr = &status;
-
-    
+   
     pid_t pid = waitpid(current->pid, &status, WNOHANG);
+    previous = current;
     current = current->next;    
     switch(pid){
     case -1:
-      perror("invalid pid ");
       break;
     case 0 :
       break;
     default:
       // print termination message and remove process from list of open processes
-      printf("background pid %d is done: ", current->pid);
+
+      printf("background pid %d is done: ", pid);
       checkStatus(statusptr);
-      removeNode(open_pid, current);
+      if(previous != NULL){
+	//printf("\n\nAttempting to remove node at %d\n\n", pid);
+	removeNode(open_pid, previous);
+      }
       break;
     }
     

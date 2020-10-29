@@ -38,27 +38,33 @@ struct Node* addNode(struct LL* linked, struct Node* node){
 void removeNode(struct LL* linked, struct Node* node){
   
   struct Node* current = linked->head;
-  struct Node* previous;
+  struct Node* previous = linked->head;
     
   // check to see if the head is the node to be removed
-  if(current){
+  if(current != NULL){
     if(current->pid == node->pid){
       linked->head = current->next;
+ 
       free(current);
       return;
     }
   }
+ 
     
   // iterate until the next node is either null or our node
   while(current && current->pid != node->pid){
     previous = current;
     current = current->next;
+
   }
  
   // if the current node is not null, free it and link the previous node with the next node
   if(current != NULL) {
+
     previous->next = current->next;
-    free(current);
+    if(current){
+      free(current);
+    }
   }
 
 }

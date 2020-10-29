@@ -25,9 +25,8 @@ void handle_SIGTSTP(int signo) {
   else {
     char* msg = "Exiting Foreground only mode\n";
     write(STDOUT_FILENO, msg, 30);
-    bg_mode = false;
+    bg_mode = true;
   }
-  
 }
 
 

@@ -21,10 +21,14 @@ struct Command* parseCommand(struct Command* command) {
   char* token;
 
   size_t index = 0;
-  size_t counterbalance = 0;
+
 
   // read a line of input from stdin
-  getline(&line, &len, stdin);
+  while(!*line){
+    //printf("Attempting to get line\n");
+    getline(&line, &len, stdin);
+    //printf("read %zu chars from stream.\n", check);
+  }
 
   // parse the command name, allocate memory for it in the struct 
   token = strtok_r(line, DELIM, &bookmark);
@@ -36,13 +40,18 @@ struct Command* parseCommand(struct Command* command) {
     // check for input redirection token and copy input filename to attribute if so
     if((*token) == '<') {
       token = strtok_r(NULL, DELIM, &bookmark);
-      command->input = token ? strdup(token) : NULL;
+      if(token != NULL){
+	command->input = token ? strdup(token) : NULL;
+      }
+      
     }
 
     // check for output redirection token and copy output filename to attribute if so
     else if((*token) == '>') {      
       token = strtok_r(NULL, DELIM, &bookmark);
-      command->output = token ? strdup(token) : NULL;
+      if(token != NULL){
+	command->output = token ? strdup(token) : NULL;
+      }
     }
 
     // check for background ampersand and set command struct's background variable to true
@@ -52,11 +61,17 @@ struct Command* parseCommand(struct Command* command) {
 
     // otherwise token is an command argument, add argument to command structs argument array
     else {
-      command->args[index++] = token ? strdup(token) : NULL;
-      token ? command->num_args++: counterbalance++;
+      if(token != NULL){
+	char* arg = calloc(strlen(token) + 5, sizeof(char));
+	strcpy(arg, token);
+	command->args[index] = arg;
+	command->num_args++;
+	index++;
+      }
     }
   }
-  
+
+  command->args[index] = NULL;
   // free the space allocated for input
   free(line);
 

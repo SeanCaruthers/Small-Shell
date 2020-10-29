@@ -54,14 +54,27 @@ void printCommand(struct Command* command) {
 
 // function for expanding the $$ string in command attributes
 void pidExpandAttributes(struct Command* command){
-  command->name ? expandPID(command->name) : NULL;
-  command->input ? expandPID(command->input) : NULL;
-  command->output ? expandPID(command->output) : NULL;
+  if(command->name){
+    command->name ? expandPID(command->name) : NULL;
+  }
+  if(command->input){
+    command->input ? expandPID(command->input) : NULL;
+  }
+  if(command->output){
+    command->output ? expandPID(command->output) : NULL;
+  }
 
   size_t index = 0;
-  while(command->args[index]) {
-    expandPID(command->args[index]);
-    index++;
+  if(command->args[index]){
+    while(command->args[index] != NULL) {
+      if(command->args[index] != NULL){
+	expandPID(command->args[index]);
+	index++;
+      }
+      else{
+	break;
+      }
+    }
   }
 }
 
@@ -99,7 +112,7 @@ char** commandArgsArray(struct Command* command) {
   }
 
   // add the null terminator                                                                                           
-  args[count] = '\0';
+  args[count] = NULL;
 
   return args;
 }

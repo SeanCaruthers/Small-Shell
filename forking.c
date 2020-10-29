@@ -12,9 +12,13 @@
 void forkCommand(struct Command* command, int* status, struct LL* open_pid) {
   extern volatile bool bg_mode;
 
+  
   // initialize the default ignore signal struct
   struct sigaction SIGTSTP_action = {{0}};
-  
+  struct sigaction ignore_action = {{0}};
+
+  ignore_action.sa_handler = SIG_IGN;
+
   // allocate and create an array of args for the exec function
   char** args = commandArgsArray(command);
   
@@ -36,12 +40,11 @@ void forkCommand(struct Command* command, int* status, struct LL* open_pid) {
     //----------------------------------------------------------------------------------------
     // fork has succeeded
   case 0 :
-    
+    sigaction(SIGTSTP, &ignore_action, 0);
     
     // setup the spawn as either a background or foreground process and redirect output
     (bg_mode && command->background) ? childBackground(command, child, open_pid) : childForeground(command, child);
-    // command->background ? childBackground(command, child, open_pid) : childForeground(command, child);
-    
+    //command->background ? childBackground(command, child, open_pid) : childForeground(command, child);
  
     //call function using exec
     execvp(args[0], args);
@@ -54,12 +57,12 @@ void forkCommand(struct Command* command, int* status, struct LL* open_pid) {
     //----------------------------------------------------------------------------------------
     // parent process path
   default :
-    // setup the SIGTSTP handler, block and flags for changing background mode 
+ 
+    // setup the SIGTSTP handler, block and flags for changing background mode                                                                                      
     SIGTSTP_action.sa_handler = handle_SIGTSTP;
     sigfillset(&SIGTSTP_action.sa_mask);
-    SIGTSTP_action.sa_flags = 0;
+    SIGTSTP_action.sa_flags = SA_RESTART;
     sigaction(SIGTSTP, &SIGTSTP_action, NULL);
-
 
     // if spawn process is running in the background send parent to foreground
     (bg_mode && command->background) ? parentForeground(command, child, status, open_pid) : parentBackground(command, child, status);

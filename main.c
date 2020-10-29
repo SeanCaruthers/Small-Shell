@@ -7,7 +7,7 @@
 #include "functions.h"
 #include "structs.h"
 #define PROMPT ":"
-bool bg_mode = true;
+volatile bool bg_mode = true;
 
 int main(void){
   
@@ -18,7 +18,7 @@ int main(void){
   ignore_action.sa_handler = SIG_IGN;
   sigaction(SIGINT, &ignore_action, NULL);
   sigaction(SIGTSTP, &ignore_action, NULL);
-
+  
   // bool for while loop (keep it structured)
   bool running = true;         
   
@@ -33,6 +33,8 @@ int main(void){
   // keep our program running 
   while(running){              
 
+    //printf("process id %d\n", getpid());
+
     // check for open background processes that have terminated
     checkOpenPID(open_pid);
 
@@ -44,18 +46,21 @@ int main(void){
     
     // pass the struct to the parse Command method to fill in the attributes
     command = parseCommand(command);
-        
+    
     // 3. Provide expansion for the variable $$
     pidExpandAttributes(command);    
 
     // remove new lines that cause bugs at the end of commands
     removeNewLinesFromAttributes(command);
 
+    //printCommand(command);
+    
     // 2. Handle blank lines and comments beginning with #
-    if(!strlen(command->name) || *command->name == '#') {
+    if(command->name == NULL || *command->name == ' ' || *command->name == '#') {
       freeCommand(command);
       continue;
     }
+
 
     // 4. Execute 3 commands: exit, cd and status    
     // check to see if the command is a built in command (execute and continue if it is)
