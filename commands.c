@@ -67,15 +67,17 @@ void pidExpandAttributes(struct Command* command){
 
 
 void removeNewLinesFromAttributes(struct Command* command){
+  
   command->name ? removeNewLines(command->name) : NULL;
   command->input ? removeNewLines(command->input) : NULL;
-  command->output ? removeNewLines(command->output) : NULL;
+  command->output ? removeNewLines(command->output) :NULL;
 
   size_t index = 0;
   while(command->args[index]) {
     removeNewLines(command->args[index]);
     index++;
   }
+
 }
 
 

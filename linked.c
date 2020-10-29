@@ -6,6 +6,7 @@
 struct Node* createNode(void){
   struct Node* node = calloc(1, sizeof(struct Node));  
   node->pid = 0;
+  node->next = NULL;
   return node;
 }
   
@@ -42,23 +43,24 @@ void removeNode(struct LL* linked, struct Node* node){
   // check to see if the head is the node to be removed
   if(current){
     if(current->pid == node->pid){
-      linked->head = linked->head->next;
+      linked->head = current->next;
       free(current);
+      return;
     }
   }
-  else{
-    return;
-  }
-  
+    
   // iterate until the next node is either null or our node
-  while(current->next){
+  while(current && current->pid != node->pid){
     previous = current;
     current = current->next;
-    if(current->pid == node->pid){
-      previous->next = current->next;
-      free(current);
-    }
   }
+ 
+  // if the current node is not null, free it and link the previous node with the next node
+  if(current != NULL) {
+    previous->next = current->next;
+    free(current);
+  }
+
 }
 
 

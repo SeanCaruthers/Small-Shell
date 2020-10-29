@@ -50,8 +50,6 @@ void parentForeground(struct Command* command, pid_t* child, int* status, struct
   node->pid = *child;
   addNode(open_pid, node);
 
-  // create a slight delay so that the bg process msg may print
-  sleep(1);
 }
 
 // a function for handle parent processes running in the background
@@ -80,13 +78,25 @@ void checkOpenPID(struct LL* open_pid){
     int status = 0;
     statusptr = &status;
 
+    
     pid_t pid = waitpid(current->pid, &status, WNOHANG);
-    if(pid){
+    current = current->next;    
+    switch(pid){
+    case -1:
+      perror("invalid pid ");
+      break;
+    case 0 :
+      break;
+    default:
       // print termination message and remove process from list of open processes
       printf("background pid %d is done: ", current->pid);
       checkStatus(statusptr);
       removeNode(open_pid, current);
+      break;
     }
-    current = current->next;
+    
+    //printf("current = %d\t current->next = %d", current->pid, current->next->pid);
+
+    
   }
 }

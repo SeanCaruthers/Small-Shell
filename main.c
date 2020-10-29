@@ -7,7 +7,7 @@
 #include "functions.h"
 #include "structs.h"
 #define PROMPT ":"
-volatile bool bg_mode = true;
+bool bg_mode = true;
 
 int main(void){
   

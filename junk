@@ -3,6 +3,7 @@ builtin.c
 commands.c
 expand.c
 forking.c
+#functions.h#
 functions.h
 junk
 junk2
