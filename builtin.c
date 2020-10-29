@@ -8,14 +8,14 @@
 #include "structs.h"
 
 // a function to check whether the command is a built in command and run it if it is
-bool checkBuiltIn(struct Command* command, int* status) {
+bool checkBuiltIn(struct Command* command, int* status, struct LL* open_pid) {
 
   if(!strcmp(command->name, "cd")){            
     changeDir(command);
     return true;
   }
   else if(!strcmp(command->name, "exit")){                                                                               
-    exitProgram(command);
+    exitProgram(command, open_pid);
   }                                         
   else if(!strcmp(command->name, "status")){                                                                            
     checkStatus(status);                                                                                                 
@@ -25,8 +25,12 @@ bool checkBuiltIn(struct Command* command, int* status) {
 }
 
 
-void exitProgram(struct Command* command) {
+void exitProgram(struct Command* command, struct LL* open_pid) {
+
+  endChildProcesses(open_pid);
+  freeLL(open_pid);
   freeCommand(command);                 
+
   exit(1);
 }
 
@@ -37,13 +41,13 @@ void changeDir(struct Command* command) {
 
   // if no args, set PWD to HOME
   if(!path) {
-    setenv("PWD", getenv("HOME"), true);
+    chdir(getenv("HOME"));
   } 
   // otherwise set to relative or absolute path stated
   else {
     // if path is absolute
     if(*path == '/') {
-      setenv("PWD", path, true);
+      chdir(path);
     }
     // if path is relative to pwd, merge the pwd with the specified path and set it to the env
     else if(*path != '.' || (*path  == '.' && *(path + 1) == '/')) {
@@ -60,9 +64,9 @@ void changeDir(struct Command* command) {
 // check exit status of last foreground process using macros as in the termination status lecture
 void checkStatus(int* status) {
   if(WIFEXITED(*status)) {
-    printf("Exit value %d\n", WEXITSTATUS(*status));
+    printf("exit value %d\n", WEXITSTATUS(*status));
   }
   else{
-    printf("Exit value %d\n", WTERMSIG(*status));
+    printf("terminated by signal %d\n", WTERMSIG(*status));
   }
 }

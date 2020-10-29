@@ -5,19 +5,6 @@
 */
 #include "libraries.h"
 
-/*
-// a function for allocating space for a path variable
-struct Path* allocatePath(char* string){
-  struct Path* path = malloc(sizeof(struct Path));
-  return path;
-}
-
-// a function for freeing space allocated for a path struct
-void freePath(struct Path* path) {
-  free(path);
-}
-*/
-
 // a function for merging a path prefix and relative suffix
 char* mergePaths(char* prefix, char* suffix) {
 
@@ -45,7 +32,7 @@ void setRelativeToPWD(char* path) {
   char* prefix = getenv("PWD");
   char* suffix = ((*path == '.') ? path+2: path);
   char* new_pwd = mergePaths(prefix, suffix);
-  setenv("PWD", new_pwd, true);
+  chdir(new_pwd);
   free(new_pwd);
 }
 
@@ -91,6 +78,6 @@ void setRelativeToParent(char* suffix){
 
   // merge the prefix and suffix, set the environment and free the path string
   char* new_pwd = mergePaths(start, suffix);
-  setenv("PWD", new_pwd, true);
+  chdir(new_pwd);
   free(new_pwd);
 }

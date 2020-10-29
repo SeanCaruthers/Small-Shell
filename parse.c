@@ -19,25 +19,30 @@ struct Command* parseCommand(struct Command* command) {
   // create variables for strtok_r
   char* bookmark;
   char* token;
+  char* empty = " ";
   size_t index = 0;
+  size_t counterbalance = 0;
 
   // read a line of input from stdin
   getline(&line, &len, stdin);
 
   // parse the command name, allocate memory for it in the struct and expand the variable $$ if necessary
-  command->name = strdup(strtok_r(line, DELIM, &bookmark));
+  token = strtok_r(line, DELIM, &bookmark);
+  command->name = token ? strdup(token) : empty;
 
   // parse tokens from the line until the newline
   while((token = strtok_r(NULL, DELIM, &bookmark))) {
 
     // check for input redirection token and copy input filename to attribute if so
     if((*token) == '<') {
-      command->input = strdup(strtok_r(NULL, DELIM, &bookmark));
+      token = strtok_r(NULL, DELIM, &bookmark);
+      command->input = token ? strdup(token) : empty;
     }
 
     // check for output redirection token and copy output filename to attribute if so
     else if((*token) == '>') {      
-      command->output = strdup(strtok_r(NULL, DELIM, &bookmark));
+      token = strtok_r(NULL, DELIM, &bookmark);
+      command->output = token ? strdup(token) : empty;
     }
 
     // check for background ampersand and set command struct's background variable to true
@@ -47,8 +52,8 @@ struct Command* parseCommand(struct Command* command) {
 
     // otherwise token is an command argument, add argument to command structs argument array
     else {
-      command->args[index++] = strdup(token);
-      command->num_args++;
+      command->args[index++] = token ? strdup(token) : empty;
+      token ? command->num_args++: counterbalance++;
     }
   }
   

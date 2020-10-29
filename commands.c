@@ -77,3 +77,27 @@ void removeNewLinesFromAttributes(struct Command* command){
     index++;
   }
 }
+
+
+// a function for formatting command args into an array suitable for exec functions
+char** commandArgsArray(struct Command* command) {
+
+  // allocate space for our arguments
+  char** args = calloc(command->num_args + 2, sizeof(char*));
+
+  // add the command name                                                                                              
+  args[0] = command->name;
+  //printf("arg[0] = %s\n", command->name);
+  // add the args                                                                                                       
+  size_t count = 1;
+  while(count <= command->num_args) {
+    args[count] = command->args[count - 1];
+    //printf("arg[%zu] = %s\n", count, command->name);
+    count++;
+  }
+
+  // add the null terminator                                                                                           
+  args[count] = '\0';
+
+  return args;
+}
