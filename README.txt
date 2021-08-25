@@ -10,6 +10,8 @@ Description  : A small shell emulator that includes:
 				  - cd, exit and status as internal commands
 				  - other commands via fork and exec
 
+![caption](./example.gif)
+
 Compilation  : 
 	      A makefile is included for compiling the shell
 */
