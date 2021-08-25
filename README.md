@@ -1,4 +1,6 @@
 
+![example](https://user-images.githubusercontent.com/20529369/130861721-08f81ea7-4687-4c20-b7f0-46c1b1bc5793.gif)
+
 <dl>
     <dt>Author</dt>
     <dd>Sean Caruthers</dd>
@@ -20,9 +22,6 @@
 	    </dd>
         </dl>
     </dd>
-
-![example](https://user-images.githubusercontent.com/20529369/130861721-08f81ea7-4687-4c20-b7f0-46c1b1bc5793.gif)
-
     <dt>Compilation</dt>
     <dd>A makefile is included for compiling the shell</dd>
 </dl>
